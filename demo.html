@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	  <meta charset="UTF-8">
+	  <title>Ninja Template Demo</title>
+	</head>
+	<body>
+		<ul id="listOutput"></ul>
+		<script type="application/ninja" name="list" output="#listOutput">
+
+
+		  /**
+		   * The word katana is reserved for these Ninja templates, you may
+		   * think of katana as 'this', it refers to the data object that has
+		   * been passed into the relevant template.
+		   *
+		   * Another reserved word is render, render simply refers to an object
+		   * the object has two simple components, the ability to add data to some
+		   * value, a value property which is the DHML that is produced and then
+		   * finally the compile property which refers to the compiled script.
+		   */
+
+
+		   for (var i = 0, s = katana.list.length; i < s; i ++) {
+		     if (katana.list[i].length > 3) {
+		      render(<li>{{katana.list[i]}}</li>);
+		      } else {
+		        render(<li>tooSmall</li>);
+		    }
+		   }
+		</script>
+
+		<script type="text/javascript" src="Ninja.js"></script>
+		<script type="text/javascript">
+			  // THIS IS JUST A DEMO
+			  var n = new Ninja();
+			  n.setData("list", {list: ["Shuriken", "Katana",  "Kunai", "Metsubushi", "a", "b", "c"]});
+			  n.render("list");
+		</script>
+	</body>
+</html>
