@@ -52,7 +52,7 @@ When executing a template, you must be aware that there are a few reserved words
   - **katana** - This refers to the data object that has been passed into the given template.
   - **render** - This refers to an object which is used to add the DHTML to the output, additionally this object stores the following:
     - **add** - A function that will add the DHTML to the processed/desired DHTML output.
-    - **compile** - A function taht will store the code that was executed by Ninja.
+    - **compile** - A function that will store the code that was executed by Ninja.
 
 Due to how simple this implementation is, it's incredibly fast and reliable, from _brief_ testing, I've noticed how it executes in IE8, and may even work for IE7 and older provided you have some polyfiller for ```querySelector``` and ```querySelectorAll```.
 
@@ -60,6 +60,28 @@ Due to how simple this implementation is, it's incredibly fast and reliable, fro
 
 # Contact
 If you have any questions or suggestions, please contact me at [my personal email address](mailto:joeevs196@gmail.com).
+
+-----
+
+# Version 2
+With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
+
+```javascript
+<% for (var i = 0; i < katana.length; i ++) { %>
+			<% var user = katana[i]; %>
+			<div class="profile">
+				<p><% user.name %></p>
+				<hr/>
+				<p><% user.age %></p>
+				<hr/>
+				<p><% user.job %></p>
+			</div>
+		<% } %>
+		<br/><br/>
+		<% katana.length %>
+```
+
+-----
 
 # Todo
   - Documentation
