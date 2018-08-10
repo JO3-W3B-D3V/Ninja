@@ -13,7 +13,6 @@ As they say, it's good to be a _'jack of all trades'_, but it's better to be a m
 
 # Version 2
 With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
-
 ```javascript
 <% for (var i = 0; i < katana.length; i ++) { %>
   <% var user = katana[i]; %>
@@ -30,11 +29,8 @@ With version two the core functionality is _slightly_ different, the syntax is m
 <% katana.length %>
 ```
 
+
 # Version 1
-
-
-## More Information
-
 As I am a full stack web developer, I typically develop the back end in such a way that it becomes either a microservice or an API. While trying to follow the rules to defining a restful system, I decided that rendering should be done on the front end, one may debate that rendering _should_ be done on the back end, which is a fair debate. **But**, personally I think that it should be done on the front end, the way I see it is that what the user sees is a part of the front end application, therefore to me this makes a bit more logical sense.
 
 When using Ninja templates, you must be aware of a few minor details, one being how ninja will pick up a template, in order for Ninja to automatically detect that it's a valid template, you must define a script tag like so:
