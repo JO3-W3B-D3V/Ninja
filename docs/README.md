@@ -29,6 +29,7 @@ With version two the core functionality is _slightly_ different, the syntax is m
 <% katana.length %>
 ```
 
+Just note that one of the things that has been ported from version 1 to version 2 is how the keyword ```katana``` is still a reserved word, however you no longer need to worry about using the keyword(s) ```render, add or compile ``` with version 2, so not only is it a nicer implementation, it's less code, **less complexity** and more **flexibility**, which is just great.  
 
 # Version 1
 As I am a full stack web developer, I typically develop the back end in such a way that it becomes either a microservice or an API. While trying to follow the rules to defining a restful system, I decided that rendering should be done on the front end, one may debate that rendering _should_ be done on the back end, which is a fair debate. **But**, personally I think that it should be done on the front end, the way I see it is that what the user sees is a part of the front end application, therefore to me this makes a bit more logical sense.
