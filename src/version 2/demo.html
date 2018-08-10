@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+	<div id="content"></div>
+		<script type="application/ninja" name="v2Demo" output="#content">
+		<% for (var i = 0; i < katana.length; i ++) { %>
+			<% var user = katana[i]; %>
+			<div class="profile">
+				<p><% user.name %></p>
+				<hr/>
+				<p><% user.age %></p>
+				<hr/>
+				<p><% user.job %></p>
+			</div>
+		<% } %>
+		<br/><br/>
+		<% katana.length %>
+		</script>
+		<script type="text/javascript" src="Ninja.js"></script>
+		<script type="text/javascript">
+			var users = [
+				{name: "Jack", age: 24, job: "Admin"},
+				{name: "Dione", age: 30, job: "Driving Tutor"},
+				{name: "Sam", age: 45, job: "Teacher"}
+			];
+			var n = new Ninja();
+			console.log(n.getTemplate("v2Demo"));
+			n.setData("v2Demo", users);
+			n.render("v2Demo");
+		</script>
+	</body>
+</html>
