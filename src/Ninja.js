@@ -147,7 +147,7 @@ function Ninja () {
         if (ninja.data != null) {
           var samurai = function () {
 			var templates = /<%([^%>]+)?%>/g; 
-			var operations = /(^( )?(if|for|else|switch|case|break|var|try|catch|finally{|}))(.*)?/g, 
+			var operations = /(^( )?(if|for|else|switch|case|break|var|try|catch|finally|console|{|}))(.*)?/g,
 			code = 'var r=[];\nvar katana = this;\n', 
 			cursor = 0, 
 			match, 
