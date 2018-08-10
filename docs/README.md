@@ -62,7 +62,7 @@ for (var i = 0, s = katana.list.length; i < s; i ++) {
 }
 ```
 
-##### More Information Continued
+##### More Information
 
 Now, you may be wondering what all of this means, so here's a brief explanation, Ninja will automatically collect the templates when a Ninja object is created ```var ninja = new Ninja();```. Each template must have a name, this way you can refer to it elsewhere in the code, as Ninja can have many templates on the same page, and you may want to render 'x' template at 'z' time, you can access templates in the JavaScript via the template name. Then as you can see, there needs to be an output too, the way in which shit is developed, you can store the output attribute as a query string, this way in JavaScript it just needs to run ```document.querySelector(x);```.
 
