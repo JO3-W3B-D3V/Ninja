@@ -68,17 +68,17 @@ With version two the core functionality is _slightly_ different, the syntax is m
 
 ```javascript
 <% for (var i = 0; i < katana.length; i ++) { %>
-			<% var user = katana[i]; %>
-			<div class="profile">
-				<p><% user.name %></p>
-				<hr/>
-				<p><% user.age %></p>
-				<hr/>
-				<p><% user.job %></p>
-			</div>
-		<% } %>
-		<br/><br/>
-		<% katana.length %>
+	<% var user = katana[i]; %>
+	<div class="profile">
+		<p><% user.name %></p>
+		<hr/>
+		<p><% user.age %></p>
+		<hr/>
+		<p><% user.job %></p>
+	</div>
+<% } %>
+<br/><br/>
+<% katana.length %>
 ```
 
 -----
