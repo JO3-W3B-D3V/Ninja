@@ -57,10 +57,6 @@ When executing a template, you must be aware that there are a few reserved words
 Due to how simple this implementation is, it's incredibly fast and reliable, from _brief_ testing, I've noticed how it executes in IE8, and may even work for IE7 and older provided you have some polyfiller for ```querySelector``` and ```querySelectorAll```.
 
 
-# Contact
-If you have any questions or suggestions, please contact me at [my personal email address](mailto:joeevs196@gmail.com).
-
-
 # Version 2
 With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
 
@@ -78,6 +74,10 @@ With version two the core functionality is _slightly_ different, the syntax is m
 <br/><br/>
 <% katana.length %>
 ```
+
+
+# Contact
+If you have any questions or suggestions, please contact me at [my personal email address](mailto:joeevs196@gmail.com).
 
 
 # Todo
