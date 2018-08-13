@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html>
-	<head></head>
+	<head>
+    <title>Ninja Demo</title>
+  </head>
 	<body>
 	<div id="content"></div>
+  <script type="application/ninja-basic" id="buttonComponent">
+    <button>Component Example <% katana %></button>
+  </script>
 		<script type="application/ninja" name="v2Demo" output="#content">
 		<% for (var i = 0; i < katana.length; i ++) { %>
 			<% var user = katana[i]; %>
-			<div class="profile">
+      <% var btn = self.parse(document.querySelector("#buttonComponent").innerHTML, i); %>
+			<div class="profile" id="profile-<% i %>">
 				<p><% user.name %></p>
 				<hr/>
 				<p><% user.age %></p>
 				<hr/>
 				<p><% user.job %></p>
-			</div>
+        <% btn %>
+      </div>
 		<% } %>
 		<br/><br/>
 		<% katana.length %>
 		</script>
+
 		<script type="text/javascript" src="Ninja.js"></script>
 		<script type="text/javascript">
+    var buttonComponent = document.querySelector("script[name='buttonComponent']");
 			var users = [
 				{name: "Jack", age: 24, job: "Admin"},
 				{name: "Dione", age: 30, job: "Driving Tutor"},
