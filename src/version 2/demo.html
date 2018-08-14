@@ -11,7 +11,7 @@
 		<script type="application/ninja" name="v2Demo" output="#content">
 		<% for (var i = 0; i < katana.length; i ++) { %>
 			<% var user = katana[i]; %>
-      <% var btn = self.parse(document.querySelector("#buttonComponent").innerHTML, i); %>
+      			<% var btn = self.parse(document.querySelector("#buttonComponent").innerHTML, i); %>
 			<div class="profile" id="profile-<% i %>">
 				<p><% user.name %></p>
 				<hr/>
@@ -27,7 +27,6 @@
 
 		<script type="text/javascript" src="Ninja.js"></script>
 		<script type="text/javascript">
-    var buttonComponent = document.querySelector("script[name='buttonComponent']");
 			var users = [
 				{name: "Jack", age: 24, job: "Admin"},
 				{name: "Dione", age: 30, job: "Driving Tutor"},
