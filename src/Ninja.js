@@ -1,7 +1,7 @@
 /**
  * @author      Joseph Evans <joeevs196@gmail.com>
  * @since       03/08/2018
- * @version     2.0.1
+ * @version     2.0.2
  * @file        The purpose behind this javascript file is to implement a highly
  *              minimal rendering engine which can be run within the web browser.
  *              Due to the preprocessing abilities, you can have JSX like syntax
@@ -38,7 +38,9 @@
  *              so UNLIKE most updates where code and features are added, this update has effectively
  *              removed code, and 'changed' the functionality & features behind this template engine.
  *
- * @update      Included the ability to parse another template into another one. 
+ * @update      Included the ability to parse another template into another one.
+ *
+ * @update      Included a render async method, this will simply take advantage of set timeout,
  */
 
 
@@ -177,6 +179,15 @@ function Ninja () {
       return samurai(xml, data);
     },
 
+    renderAsync: function (name, fnc) {
+      setTimeout(function() {
+        publicProperties.render(name, fnc);
+      }, 0);
+    },
+
+    /**
+     * @see http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     */
     render: function (name, fnc) {
       var ninja = ninjas[name];
       if (ninja != null) {
