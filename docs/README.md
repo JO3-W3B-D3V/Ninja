@@ -85,12 +85,3 @@ Due to how simple this implementation is, it's incredibly fast and reliable, fro
 
 # Contact
 If you have any questions or suggestions, please contact me at [my personal email address](mailto:joeevs196@gmail.com).
-
-
-# Todo
-  - Documentation
-  - Testing
-  - Tidy Up
-  - Contemplate Additional Features
-      - After all this is meant to be as compressed, lightweight and as fast as possible.
-  - etc.
