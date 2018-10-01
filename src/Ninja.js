@@ -1,7 +1,7 @@
 /**
  * @author      Joseph Evans <joeevs196@gmail.com>
  * @since       03/08/2018
- * @version     2.0.3
+ * @version     2.0.4
  * @file        The purpose behind this javascript file is to implement a highly
  *              minimal rendering engine which can be run within the web browser.
  *              Due to the preprocessing abilities, you can have JSX like syntax
