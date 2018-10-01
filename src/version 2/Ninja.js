@@ -40,7 +40,9 @@
  *
  * @update      Included the ability to parse another template into another one.
  *
- * @update      Included a render async method, this will simply take advantage of set timeout,
+ * @update      Included a render async method, this will simply take advantage of set timeout.
+ *
+ * @update      Included a lot more documentation & debugging tool(s).
  */
 
 
@@ -60,7 +62,13 @@
  * that such as storing the current state of the situation, the Ninja only does as commanded.
  */
 
-
+/**
+ * @global
+ * @class  Ninja
+ * @desc   Ninja is a mighty warrior that will provide a service that allows
+ *         for very fast, accurate and simple methods for rendering your DHTML.
+ *
+ */
 function Ninja () {
   if (Ninja.Sensai != null){
     return Ninja.Sensai;
@@ -74,6 +82,32 @@ function Ninja () {
    */
   var ninjas = {};
 
+  /**
+   * @private
+   * This allows Ninja to see his errors, his past mistakes, this allows Ninja to
+   * learn and become better warrior.
+   */
+  var debug = false;
+
+  /**
+   * @private
+   * @function ninjaLog
+   * @param    {Error} error
+   * @desc     This allows Ninja to study his mistakes, his ways of error(s).
+   */
+  var ninjaLog  = function (error) {
+    if (debug) {
+      try {
+        console.log('\n===================');
+        console.log('=== NINJA ERROR ===');
+        console.log(error);
+        console.log('=== NINJA ERROR ===');
+        console.log('===================\n');
+      } catch (NoAccessToConsole) {
+        // There is nothing more that cna be done ninja.
+      }
+    }
+  };
 
   /**
    * @private
@@ -111,8 +145,13 @@ function Ninja () {
 
   /**
    * @private
-   * You see ninja, even you will need the help of a samurai from time to time as
-   * it is a well known fact that the samurai are strong and mighty warriors
+   * @function samurai
+   * @param    {String}   html
+   * @param    {*}        data
+   * @return   {Function}
+   * @desc     You see Ninja, even you will need the help of a samurai
+   *           from time to time as it is a well known fact that the samurai
+   *           are strong and mighty warriors.
    */
   var samurai = function (html, data) {
     var templates = /<%([^%>]+)?%>/g;
@@ -121,21 +160,21 @@ function Ninja () {
       cursor = 0,
       match;
 
-      var add = function(line, js) {
-        js  ? (code += line.match(operations)
-            ? line + '\n' : 'r.push(' + line + ');\n') :
-            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
-        return add;
-      }
+    var add = function(line, js) {
+      js  ? (code += line.match(operations)
+        ? line + '\n' : 'r.push(' + line + ');\n') :
+        (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+      return add;
+    }
 
-      while (match = templates.exec(html)) {
-        add(html.slice(cursor, match.index))(match[1], true);
-        cursor = match.index + match[0].length;
-      }
+    while (match = templates.exec(html)) {
+      add(html.slice(cursor, match.index))(match[1], true);
+      cursor = match.index + match[0].length;
+    }
 
-      add(html.substr(cursor, html.length - cursor));
-      code += 'return r.join("");';
-      return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
+    add(html.substr(cursor, html.length - cursor));
+    code += 'return r.join("");';
+    return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
   };
 
 
@@ -147,38 +186,129 @@ function Ninja () {
    * important information.
    */
   var publicProperties = {
+
+    /**
+     * @public
+     * @function getTemplate
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method is to allow Ninja to simply reflect and view
+     *           himself.
+     */
     getTemplate: function (name) {
-     return ninjas[name];
+      try {
+        return ninjas[name];
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
     },
 
+    /**
+     * @public
+     * @function getData
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method allows Ninja to see what data
+     *           has been assigned to which target.
+     */
     getData: function (name) {
-      if (ninjas[name] != null) {
-        return ninjas[name].data;
+      try {
+        if (ninjas[name] != null) {
+          return ninjas[name].data;
+        }
+      } catch (SomeError) {
+        ninjaLog(SomeError);
       }
     },
 
+    /**
+     * @public
+     * @function getOutPut
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method is to allow Ninja to review what he
+     *           has done.
+     */
     getOutPut : function (name) {
-      if (ninjas[name] != null) {
-        return ninjas[name].output;
+      try {
+        if (ninjas[name] != null) {
+          return ninjas[name].output;
+        }
+      } catch (SomeError) {
+        ninjaLog(SomeError);
       }
     },
 
+    /**
+     * @public
+     * @function setData
+     * @param    {String} name
+     * @param    {*}      data
+     * @desc      The purpose of this method is to simply allow Ninja to set the data
+     *            that is assigned to his given target.
+     */
     setData: function (name, data) {
-      ninjas[name].data = data;
+      try {
+        ninjas[name].data = data;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
     },
 
+    /**
+     * @public
+     * @function setOutput
+     * @param    {String} name
+     * @param    {*}      output
+     * @desc     The purpose of this method is to simply allow Ninja to set the
+     */
     setOutput: function (name, output) {
-      ninjas[name].output = output;
+      try {
+        ninjas[name].output = output;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
     },
 
+    /**
+     * @public
+     * @function setTemplate
+     * @param    {String} name
+     * @param    {*}      template
+     * @desc     The purpose of this method is to simply allow Ninja
+     *           to create a new target.
+     */
     setTemplate: function (name, template) {
-      ninjas[name] = template;
+      try {
+        ninjas[name] = template;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
     },
 
+    /**
+     * @public
+     * @param  {String} xml
+     * @param  {*}      data
+     * @desc   This will allow Ninja to simply execute his given task without
+     *         having to provide the result(s) instantly.
+     */
     parse: function (xml, data) {
-      return samurai(xml, data);
+      try {
+        return samurai(xml, data);
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
     },
 
+    /**
+     * @public
+     * @function renderAsync
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This is where Ninja will attempt to provide some results
+     *           without preventing fellow warriors from doing their job.
+     */
     renderAsync: function (name, fnc) {
       setTimeout(function() {
         publicProperties.render(name, fnc);
@@ -186,7 +316,13 @@ function Ninja () {
     },
 
     /**
-     * @see http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     * @public
+     * @function render
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This is where Ninja must prove himself, Ninja must
+     *           provide some results.
+     * @see      http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
      */
     render: function (name, fnc) {
       var ninja = ninjas[name];
@@ -203,6 +339,16 @@ function Ninja () {
           }
         }
       }
+    },
+
+    /**
+     * @public
+     * @function toggleErrorLog
+     * @desc     This method will allow Ninja to see whether or not
+     *           he would like to see the ways of his own mistakes.
+     */
+    toggleErrorLog: function () {
+      debug = !debug;
     }
   };
 
