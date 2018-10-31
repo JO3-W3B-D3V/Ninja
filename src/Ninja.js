@@ -4,7 +4,7 @@
  * @version     2.0.4
  * @file        The purpose behind this javascript file is to implement a highly
  *              minimal rendering engine which can be run within the web browser.
- *              Due to the preprocessing abilities, you can have JSX like syntax
+ *              Due to the pre-processing abilities, you can have JSX like syntax
  *              within your ninja templates. I believe that many React developers
  *              may actually quite like that!
  * @copyright   (c) 2018 copyright holder all Rights Reserved.
@@ -70,10 +70,11 @@
  *
  */
 function Ninja () {
+
+  // There can be only one!
   if (Ninja.Sensai != null){
     return Ninja.Sensai;
   }
-
 
   /**
    * @private
@@ -88,6 +89,13 @@ function Ninja () {
    * learn and become better warrior.
    */
   var debug = false;
+
+  /**
+   *
+   */
+  var ninjaError = function (error) {
+    throw {message : error};
+  };
 
   /**
    * @private
@@ -135,8 +143,8 @@ function Ninja () {
       throw new Error("The Sensai will not be happy with this ninja." +
         "\nIn order to join our ranks little one, you must first define yourself with a name." +
         "\nYou must also have a place to rest, now please state a name " +
-        "and a place to output your energy snesai." +
-        "\n\nThe template tag must have an output attribtue and a name attribute, " +
+        "and a place to output your energy sensai." +
+        "\n\nThe template tag must have an output attribute and a name attribute, " +
         "the name should be a simple string, it can contain spaces if you like. Additionally, " +
         "the output attribute should be a query string to a specific element. ");
     }
@@ -165,7 +173,7 @@ function Ninja () {
         ? line + '\n' : 'r.push(' + line + ');\n') :
         (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
       return add;
-    }
+    };
 
     while (match = templates.exec(html)) {
       add(html.slice(cursor, match.index))(match[1], true);
@@ -323,13 +331,17 @@ function Ninja () {
      * @desc     This is where Ninja must prove himself, Ninja must
      *           provide some results.
      * @see      http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     * @todo     Reconsider the design of the Ninja.
      */
     render: function (name, fnc) {
       var ninja = ninjas[name];
       if (ninja != null) {
-        if (ninja.data != null) {
+        // What if ninja desires null as his data?
+        //if (ninja.data != null) {//
           ninja.output.innerHTML = samurai(ninja.template.innerHTML, ninja.data);
-          if (typeof fnc == "function") {
+
+          // Type comparison & value for the sake of it.
+          if (typeof fnc === "function") {
             fnc();
           } else if (fnc != null) {
             throw new Error("The Sensai will not be happy with this ninja." +
@@ -337,7 +349,7 @@ function Ninja () {
               "was not the correct format.\n\nThis method accepts a string, " +
               "followed by a function(or null) and nothign else.");
           }
-        }
+        //}//
       }
     },
 
