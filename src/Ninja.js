@@ -1,7 +1,7 @@
 /**
  * @author      Joseph Evans <joeevs196@gmail.com>
  * @since       03/08/2018
- * @version     2.0.4
+ * @version     2.0.5
  * @file        The purpose behind this javascript file is to implement a highly
  *              minimal rendering engine which can be run within the web browser.
  *              Due to the pre-processing abilities, you can have JSX like syntax
@@ -350,6 +350,26 @@ function Ninja () {
               "followed by a function(or null) and nothign else.");
           }
         //}//
+      }
+    },
+
+    /**
+     * @public
+     * @function
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This may be for when Ninja wishes to add to his knowledge more so
+     *           than practice upon existing knowledge.
+     * @todo     Carryout some testing.
+     */
+    renderAppend: function (name, fnc) {
+      var ninja = ninjas[name];
+
+      if (ninja != null) {
+        var oldHTML = ninja.output.innerHTML.toString();
+        publicProperties.render(name, fnc);
+        var newHTML = ninja.output.innerHTML.toString();
+        ninja.output.innerHTML = oldHTML + newHTML;
       }
     },
 
