@@ -11,6 +11,9 @@ I developed Ninja for the above reasons, I found that **a lot** existing templat
 As they say, it's good to be a _'jack of all trades'_, but it's better to be a master of one, and that's essentially the desired outcome from Ninja, it doesn't do any event handling, it doesn't do 'x', 'y', or 'z', it simply looks at some template(s) and produces the HTML/DHTML, that's it. 
 
 
+## Todo
+Consider implementing a controller feature, so that every-time 'x' Ninja template is rendered, some controller is run, whether that be adding an event listener(s), or whatever, etc. Although I may argue that this may also go beyond the simplicity of a template engine then, one of the main objectives is simplicity after all. 
+
 # Version 2
 With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
 ```javascript
