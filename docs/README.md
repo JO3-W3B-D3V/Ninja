@@ -1,4 +1,4 @@
-# Ninja School
+# Ninja 忍者
 
 Ninja is a front end template engine in the most simplistic of terms, **however** it is possibly among the smallest JavaScript template engine(s) around, it is near minimal, the purposes behind such a template engine are listed below:
 
