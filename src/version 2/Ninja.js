@@ -1,7 +1,7 @@
 /**
  * @author      Joseph Evans <joeevs196@gmail.com>
  * @since       03/08/2018
- * @version     2.0.5
+ * @version     2.0.7
  * @file        The purpose behind this javascript file is to implement a highly
  *              minimal rendering engine which can be run within the web browser.
  *              Due to the pre-processing abilities, you can have JSX like syntax
@@ -43,6 +43,10 @@
  * @update      Included a render async method, this will simply take advantage of set timeout.
  *
  * @update      Included a lot more documentation & debugging tool(s).
+ *
+ * @update      Included the ability to add templates at a later point. 
+ *
+ * @update      Included the ability to assign controllers to templates. 
  */
 
 
@@ -91,7 +95,10 @@ function Ninja () {
   var debug = false;
 
   /**
-   *
+   * @private 
+	 * @function ninjaError
+	 * @param    {*} error 
+	 * @desc     This method is used to simply throw a custom Ninja error. 
    */
   var ninjaError = function (error) {
     throw {message : error};
@@ -139,6 +146,7 @@ function Ninja () {
       ninjas[name].template = ninjaTemplate;
       ninjas[name].output = document.querySelector(output);
       ninjas[name].data = null;
+			ninjas[name].controller = null;
     } else {
       throw new Error("The Sensai will not be happy with this ninja." +
         "\nIn order to join our ranks little one, you must first define yourself with a name." +
@@ -288,11 +296,28 @@ function Ninja () {
      */
     setTemplate: function (name, template) {
       try {
-        ninjas[name] = template;
+        ninjas[name].template = template;
       } catch (NoSuchPropertyExists) {
         ninjaLog(NoSuchPropertyExists);
       }
     },
+		
+		
+		/**
+		 * @public 
+		 * @function setController 
+		 * @param    {String}   name
+		 * @param    {Function} controller 
+		 * @desc     This method is used to simply set the controller 
+		 *           of a specific Ninja. 
+		 */
+		setController: function (name, controller) {
+			try {
+				ninjas[name].controller = controller;
+			} catch (NoSuchPropertyExists) {
+				ninjaLog(NoSuchPropertyExists);
+			}
+		},
 
     /**
      * @public
@@ -349,6 +374,10 @@ function Ninja () {
               "was not the correct format.\n\nThis method accepts a string, " +
               "followed by a function(or null) and nothign else.");
           }
+					
+					if (ninja.controller != null && typeof ninja.controller == 'function') {
+						ninja.controller();
+					}
         //}//
       }
     },
@@ -370,7 +399,20 @@ function Ninja () {
         publicProperties.render(name, fnc);
         var newHTML = ninja.output.innerHTML.toString();
         ninja.output.innerHTML = oldHTML + newHTML;
-      }
+				
+				if (typeof fnc === "function") {
+					fnc();
+				} else if (fnc != null) {
+					throw new Error("The Sensai will not be happy with this ninja." +
+						"\nThere is only a certian format in which is accepted, the provided data " +
+						"was not the correct format.\n\nThis method accepts a string, " +
+						"followed by a function(or null) and nothign else.");
+				}
+					
+				if (ninja.controller != null && typeof ninja.controller == 'function') {
+					ninja.controller();
+				}
+			}
     },
 
     /**
@@ -381,7 +423,36 @@ function Ninja () {
      */
     toggleErrorLog: function () {
       debug = !debug;
-    }
+    },
+		
+		/**
+		 * @public 
+		 * @function addTemplate
+		 * @param    {Object} options
+		 * @desc     This method allows Ninja to add a custom template 
+		 *           once the document has loaded. 
+		 */
+		addTemplate: function (options) {
+			if (typeof options == "object") {
+				if ('name' in options 
+					&& 'data' in options 
+					&& 'output' in options 
+					&& 'template' in options) {
+						try {
+						ninjas[options.name].template = options.template;
+						ninjas[options.name].output =  document.querySelector(options.output);
+						ninjas[options.name].data = options.data;
+						
+						if ('controller' in options) {
+							ninjas[options.name].controller = options.controller;
+						}
+						
+					} catch (Exception) {
+						ninjaLog(Exception);
+					}
+				}
+			}
+		}
   };
 
 
