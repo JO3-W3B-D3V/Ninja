@@ -178,7 +178,7 @@ function Ninja() {
   var samurai = function (html, data) {
     try {
       var templates = /<%([^%>]+)?%>/g;
-      var operations = /(^( )?(if|for|else|switch|case|break|var|try|catch|finally|console|self|{|}|;|:|[|]))(.*)?/g,
+      var operations = /(^( )?(if|for|else|switch|case|break|var|let|const|this|try|catch|finally|console|self|{|}|;|:|[|]))(.*)?/g,
         code = 'var r=[];\nvar katana = this;\nvar self = new Ninja();\n',
         cursor = 0,
         match;
