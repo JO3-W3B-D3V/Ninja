@@ -12,7 +12,7 @@ As they say, it's good to be a _'jack of all trades'_, but it's better to be a m
 
 
 ## Todo
-Consider implementing a controller feature, so that every-time 'x' Ninja template is rendered, some controller is run, whether that be adding an event listener(s), or whatever, etc. Although I may argue that this may also go beyond the simplicity of a template engine then, one of the main objectives is simplicity after all. 
+Consider creating a standard & doc(s) for NML(Ninja Markup Language).
 
 # Version 2
 With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
