@@ -47,6 +47,8 @@
  * @update      Included the ability to add templates at a later point.
  *
  * @update      Included the ability to assign controllers to templates.
+ *
+ * @update      More try/catch(es) included to take advantage of the 'ninjaLog' method. 
  */
 
 
@@ -74,393 +76,415 @@
  */
 function Ninja() {
 
-    // There can be only one!
-    if (Ninja.Sensai != null) {
-        return Ninja.Sensai;
+  // There can be only one!
+  if (Ninja.Sensai != null) {
+    return Ninja.Sensai;
+  }
+
+  /**
+   * @private
+   * This is a group of the finest warriors, this group of warriors is only accessible
+   * to the Sensai.
+   */
+  var ninjas = {};
+
+  /**
+   * @private
+   * This allows Ninja to see his errors, his past mistakes, this allows Ninja to
+   * learn and become better warrior.
+   */
+  var debug = false;
+
+  /**
+   * @private
+   * @function ninjaError
+   * @param    {*} error
+   * @desc     This method is used to simply throw a custom Ninja error.
+   */
+  var ninjaError = function (error) {
+    throw {message: error};
+  };
+
+  /**
+   * @private
+   * @function ninjaLog
+   * @param    {Error} error
+   * @desc     This allows Ninja to study his mistakes, his ways of error(s).
+   */
+  var ninjaLog = function (error) {
+    if (debug) {
+      try {
+        console.log('\n===================');
+        console.log('=== NINJA ERROR ===');
+        console.log(error);
+        console.log('=== NINJA ERROR ===');
+        console.log('===================\n');
+      } catch (NoAccessToConsole) {
+        // There is nothing more that cna be done ninja.
+      }
     }
+  };
 
-    /**
-     * @private
-     * This is a group of the finest warriors, this group of warriors is only accessible
-     * to the Sensai.
-     */
-    var ninjas = {};
+  /**
+   * @private
+   * This is how the Sensai locates these warriors, he must take care of his warriors in order
+   * for them to take care of him.
+   */
+  var ninjaTemplates = [];
 
-    /**
-     * @private
-     * This allows Ninja to see his errors, his past mistakes, this allows Ninja to
-     * learn and become better warrior.
-     */
-    var debug = false;
+  try {
+    ninjaTemplates = document.querySelectorAll("[type='application/ninja']");
+  } catch (NoDOMException) {
+    ninjaLog(NoDOMException);
+  }
 
-    /**
-     * @private
-     * @function ninjaError
-     * @param    {*} error
-     * @desc     This method is used to simply throw a custom Ninja error.
-     */
-    var ninjaError = function (error) {
-        throw {message: error};
-    };
+  /**
+   * You see, there is a sign up process, in order for a Ninja to be classified as a success,
+   * he must first pass the test that the Sensai has put in place.
+   */
+  for (var i = 0, s = ninjaTemplates.length; i < s; i++) {
+    var ninjaTemplate = ninjaTemplates[i];
+    var name = ninjaTemplate.getAttribute("name");
+    var output = ninjaTemplate.getAttribute("output");
 
-    /**
-     * @private
-     * @function ninjaLog
-     * @param    {Error} error
-     * @desc     This allows Ninja to study his mistakes, his ways of error(s).
-     */
-    var ninjaLog = function (error) {
-        if (debug) {
-            try {
-                console.log('\n===================');
-                console.log('=== NINJA ERROR ===');
-                console.log(error);
-                console.log('=== NINJA ERROR ===');
-                console.log('===================\n');
-            } catch (NoAccessToConsole) {
-                // There is nothing more that cna be done ninja.
-            }
-        }
-    };
-
-    /**
-     * @private
-     * This is how the Sensai locates these warriors, he must take care of his warriors in order
-     * for them to take care of him.
-     */
-    var ninjaTemplates = document.querySelectorAll("[type='application/ninja']");
-
-
-    /**
-     * You see, there is a sign up process, in order for a Ninja to be classified as a success,
-     * he must first pass the test that the Sensai has put in place.
-     */
-    for (var i = 0, s = ninjaTemplates.length; i < s; i++) {
-        var ninjaTemplate = ninjaTemplates[i];
-        var name = ninjaTemplate.getAttribute("name");
-        var output = ninjaTemplate.getAttribute("output");
-
-        if (name != null && output != null) {
-            ninjas[name] = {};
-            ninjas[name].template = ninjaTemplate;
-            ninjas[name].output = document.querySelector(output);
-            ninjas[name].data = null;
-            ninjas[name].controller = null;
-        } else {
-            throw new Error("The Sensai will not be happy with this ninja." +
-                "\nIn order to join our ranks little one, you must first define yourself with a name." +
-                "\nYou must also have a place to rest, now please state a name " +
-                "and a place to output your energy sensai." +
-                "\n\nThe template tag must have an output attribute and a name attribute, " +
-                "the name should be a simple string, it can contain spaces if you like. Additionally, " +
-                "the output attribute should be a query string to a specific element. ");
-        }
+    if (name != null && output != null) {
+      ninjas[name] = {};
+      ninjas[name].template = ninjaTemplate;
+      ninjas[name].output = document.querySelector(output);
+      ninjas[name].data = null;
+      ninjas[name].controller = null;
+    } else {
+      throw new Error("The Sensai will not be happy with this ninja." +
+        "\nIn order to join our ranks little one, you must first define yourself with a name." +
+        "\nYou must also have a place to rest, now please state a name " +
+        "and a place to output your energy sensai." +
+        "\n\nThe template tag must have an output attribute and a name attribute, " +
+        "the name should be a simple string, it can contain spaces if you like. Additionally, " +
+        "the output attribute should be a query string to a specific element. ");
     }
+  }
 
+
+  /**
+   * @private
+   * @function samurai
+   * @param    {String}   html
+   * @param    {*}        data
+   * @return   {Function}
+   * @desc     You see Ninja, even you will need the help of a samurai
+   *           from time to time as it is a well known fact that the samurai
+   *           are strong and mighty warriors.
+   */
+  var samurai = function (html, data) {
+    try {
+      var templates = /<%([^%>]+)?%>/g;
+      var operations = /(^( )?(if|for|else|switch|case|break|var|let|const|this|try|catch|finally|console|self|{|}|;|:|[|]))(.*)?/g,
+        code = 'var r=[];\nvar katana = this;\nvar self = new Ninja();\n',
+        cursor = 0,
+        match;
+
+      var add = function (line, js) {
+        js ? (code += line.match(operations)
+          ? line + '\n' : 'r.push(' + line + ');\n') :
+          (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+        return add;
+      };
+
+      while (match = templates.exec(html)) {
+        add(html.slice(cursor, match.index))(match[1], true);
+        cursor = match.index + match[0].length;
+      }
+
+      add(html.substr(cursor, html.length - cursor));
+      code += 'return r.join("");';
+      return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
+    } catch (NinjaException) {
+      ninjaLog(NinjaException);
+    }
+  };
+
+
+  /**
+   * @public
+   * You see Ninja, this is what you must become, this is how other people may see you.
+   *
+   * As you are now Ninja, you must provide a set of services, but you must not give away any
+   * important information.
+   */
+  var publicProperties = {
 
     /**
-     * @private
-     * @function samurai
-     * @param    {String}   html
-     * @param    {*}        data
-     * @return   {Function}
-     * @desc     You see Ninja, even you will need the help of a samurai
-     *           from time to time as it is a well known fact that the samurai
-     *           are strong and mighty warriors.
+     * @public
+     * @function getTemplate
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method is to allow Ninja to simply reflect and view
+     *           himself.
      */
-    var samurai = function (html, data) {
-        var templates = /<%([^%>]+)?%>/g;
-        var operations = /(^( )?(if|for|else|switch|case|break|var|try|catch|finally|console|self|{|}|;|:|[|]))(.*)?/g,
-            code = 'var r=[];\nvar katana = this;\nvar self = new Ninja();\n',
-            cursor = 0,
-            match;
+    getTemplate: function (name) {
+      try {
+        return ninjas[name];
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
+    },
 
-        var add = function (line, js) {
-            js ? (code += line.match(operations)
-                ? line + '\n' : 'r.push(' + line + ');\n') :
-                (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
-            return add;
-        };
-
-        while (match = templates.exec(html)) {
-            add(html.slice(cursor, match.index))(match[1], true);
-            cursor = match.index + match[0].length;
+    /**
+     * @public
+     * @function getData
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method allows Ninja to see what data
+     *           has been assigned to which target.
+     */
+    getData: function (name) {
+      try {
+        if (ninjas[name] != null) {
+          return ninjas[name].data;
         }
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
+    },
 
-        add(html.substr(cursor, html.length - cursor));
-        code += 'return r.join("");';
-        return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
-    };
+    /**
+     * @public
+     * @function getOutPut
+     * @param    {String} name
+     * @return   {*}
+     * @desc     The purpose of this method is to allow Ninja to review what he
+     *           has done.
+     */
+    getOutPut: function (name) {
+      try {
+        if (ninjas[name] != null) {
+          return ninjas[name].output;
+        }
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
+    },
+
+    /**
+     * @public
+     * @function setData
+     * @param    {String} name
+     * @param    {*}      data
+     * @desc      The purpose of this method is to simply allow Ninja to set the data
+     *            that is assigned to his given target.
+     */
+    setData: function (name, data) {
+      try {
+        ninjas[name].data = data;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
+    },
+
+    /**
+     * @public
+     * @function setOutput
+     * @param    {String} name
+     * @param    {*}      output
+     * @desc     The purpose of this method is to simply allow Ninja to set the
+     */
+    setOutput: function (name, output) {
+      try {
+        ninjas[name].output = output;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
+    },
+
+    /**
+     * @public
+     * @function setTemplate
+     * @param    {String} name
+     * @param    {*}      template
+     * @desc     The purpose of this method is to simply allow Ninja
+     *           to create a new target.
+     */
+    setTemplate: function (name, template) {
+      try {
+        ninjas[name].template = template;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
+    },
 
 
     /**
      * @public
-     * You see Ninja, this is what you must become, this is how other people may see you.
-     *
-     * As you are now Ninja, you must provide a set of services, but you must not give away any
-     * important information.
+     * @function setController
+     * @param    {String}   name
+     * @param    {Function} controller
+     * @desc     This method is used to simply set the controller
+     *           of a specific Ninja.
      */
-    var publicProperties = {
-
-        /**
-         * @public
-         * @function getTemplate
-         * @param    {String} name
-         * @return   {*}
-         * @desc     The purpose of this method is to allow Ninja to simply reflect and view
-         *           himself.
-         */
-        getTemplate: function (name) {
-            try {
-                return ninjas[name];
-            } catch (SomeError) {
-                ninjaLog(SomeError);
-            }
-        },
-
-        /**
-         * @public
-         * @function getData
-         * @param    {String} name
-         * @return   {*}
-         * @desc     The purpose of this method allows Ninja to see what data
-         *           has been assigned to which target.
-         */
-        getData: function (name) {
-            try {
-                if (ninjas[name] != null) {
-                    return ninjas[name].data;
-                }
-            } catch (SomeError) {
-                ninjaLog(SomeError);
-            }
-        },
-
-        /**
-         * @public
-         * @function getOutPut
-         * @param    {String} name
-         * @return   {*}
-         * @desc     The purpose of this method is to allow Ninja to review what he
-         *           has done.
-         */
-        getOutPut: function (name) {
-            try {
-                if (ninjas[name] != null) {
-                    return ninjas[name].output;
-                }
-            } catch (SomeError) {
-                ninjaLog(SomeError);
-            }
-        },
-
-        /**
-         * @public
-         * @function setData
-         * @param    {String} name
-         * @param    {*}      data
-         * @desc      The purpose of this method is to simply allow Ninja to set the data
-         *            that is assigned to his given target.
-         */
-        setData: function (name, data) {
-            try {
-                ninjas[name].data = data;
-            } catch (NoSuchPropertyExists) {
-                ninjaLog(NoSuchPropertyExists);
-            }
-        },
-
-        /**
-         * @public
-         * @function setOutput
-         * @param    {String} name
-         * @param    {*}      output
-         * @desc     The purpose of this method is to simply allow Ninja to set the
-         */
-        setOutput: function (name, output) {
-            try {
-                ninjas[name].output = output;
-            } catch (NoSuchPropertyExists) {
-                ninjaLog(NoSuchPropertyExists);
-            }
-        },
-
-        /**
-         * @public
-         * @function setTemplate
-         * @param    {String} name
-         * @param    {*}      template
-         * @desc     The purpose of this method is to simply allow Ninja
-         *           to create a new target.
-         */
-        setTemplate: function (name, template) {
-            try {
-                ninjas[name].template = template;
-            } catch (NoSuchPropertyExists) {
-                ninjaLog(NoSuchPropertyExists);
-            }
-        },
-
-
-        /**
-         * @public
-         * @function setController
-         * @param    {String}   name
-         * @param    {Function} controller
-         * @desc     This method is used to simply set the controller
-         *           of a specific Ninja.
-         */
-        setController: function (name, controller) {
-            try {
-                ninjas[name].controller = controller;
-            } catch (NoSuchPropertyExists) {
-                ninjaLog(NoSuchPropertyExists);
-            }
-        },
-
-        /**
-         * @public
-         * @param  {String} xml
-         * @param  {*}      data
-         * @desc   This will allow Ninja to simply execute his given task without
-         *         having to provide the result(s) instantly.
-         */
-        parse: function (xml, data) {
-            try {
-                return samurai(xml, data);
-            } catch (SomeError) {
-                ninjaLog(SomeError);
-            }
-        },
-
-        /**
-         * @public
-         * @function renderAsync
-         * @param    {String}   name
-         * @param    {Function} fnc
-         * @desc     This is where Ninja will attempt to provide some results
-         *           without preventing fellow warriors from doing their job.
-         */
-        renderAsync: function (name, fnc) {
-            setTimeout(function () {
-                publicProperties.render(name, fnc);
-            }, 0);
-        },
-
-        /**
-         * @public
-         * @function render
-         * @param    {String}   name
-         * @param    {Function} fnc
-         * @desc     This is where Ninja must prove himself, Ninja must
-         *           provide some results.
-         * @see      http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
-         * @todo     Reconsider the design of the Ninja.
-         */
-        render: function (name, fnc) {
-            var ninja = ninjas[name];
-            if (ninja != null) {
-                // What if ninja desires null as his data?
-                //if (ninja.data != null) {//
-                ninja.output.innerHTML = samurai(ninja.template.innerHTML, ninja.data);
-
-                // Type comparison & value for the sake of it.
-                if (typeof fnc === "function") {
-                    fnc();
-                } else if (fnc != null) {
-                    throw new Error("The Sensai will not be happy with this ninja." +
-                        "\nThere is only a certian format in which is accepted, the provided data " +
-                        "was not the correct format.\n\nThis method accepts a string, " +
-                        "followed by a function(or null) and nothign else.");
-                }
-
-                if (ninja.controller != null && typeof ninja.controller == 'function') {
-                    ninja.controller();
-                }
-                //}//
-            }
-        },
-
-        /**
-         * @public
-         * @function
-         * @param    {String}   name
-         * @param    {Function} fnc
-         * @desc     This may be for when Ninja wishes to add to his knowledge more so
-         *           than practice upon existing knowledge.
-         * @todo     Carryout some testing.
-         */
-        renderAppend: function (name, fnc) {
-            var ninja = ninjas[name];
-
-            if (ninja != null) {
-                var oldHTML = ninja.output.innerHTML.toString();
-                publicProperties.render(name, fnc);
-                var newHTML = ninja.output.innerHTML.toString();
-                ninja.output.innerHTML = oldHTML + newHTML;
-
-                if (typeof fnc === "function") {
-                    fnc();
-                } else if (fnc != null) {
-                    throw new Error("The Sensai will not be happy with this ninja." +
-                        "\nThere is only a certian format in which is accepted, the provided data " +
-                        "was not the correct format.\n\nThis method accepts a string, " +
-                        "followed by a function(or null) and nothign else.");
-                }
-
-                if (ninja.controller != null && typeof ninja.controller == 'function') {
-                    ninja.controller();
-                }
-            }
-        },
-
-        /**
-         * @public
-         * @function toggleErrorLog
-         * @desc     This method will allow Ninja to see whether or not
-         *           he would like to see the ways of his own mistakes.
-         */
-        toggleErrorLog: function () {
-            debug = !debug;
-        },
-
-        /**
-         * @public
-         * @function addTemplate
-         * @param    {Object} options
-         * @desc     This method allows Ninja to add a custom template
-         *           once the document has loaded.
-         */
-        addTemplate: function (options) {
-            if (typeof options == "object") {
-                if ('name' in options
-                    && 'data' in options
-                    && 'output' in options
-                    && 'template' in options) {
-                    try {
-                        ninjas[options.name].template = options.template;
-                        ninjas[options.name].output = document.querySelector(options.output);
-                        ninjas[options.name].data = options.data;
-
-                        if ('controller' in options) {
-                            ninjas[options.name].controller = options.controller;
-                        }
-
-                    } catch (Exception) {
-                        ninjaLog(Exception);
-                    }
-                }
-            }
-        }
-    };
-
+    setController: function (name, controller) {
+      try {
+        ninjas[name].controller = controller;
+      } catch (NoSuchPropertyExists) {
+        ninjaLog(NoSuchPropertyExists);
+      }
+    },
 
     /**
-     * Ah, I see Ninja, The student has become the master.
+     * @public
+     * @param  {String} xml
+     * @param  {*}      data
+     * @desc   This will allow Ninja to simply execute his given task without
+     *         having to provide the result(s) instantly.
      */
-    if (Ninja.Sensai == null) {
-        Ninja.Sensai = publicProperties;
-    }
+    parse: function (xml, data) {
+      try {
+        return samurai(xml, data);
+      } catch (SomeError) {
+        ninjaLog(SomeError);
+      }
+    },
 
-    return Ninja.Sensai;
+    /**
+     * @public
+     * @function renderAsync
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This is where Ninja will attempt to provide some results
+     *           without preventing fellow warriors from doing their job.
+     */
+    renderAsync: function (name, fnc) {
+      setTimeout(function () {
+        publicProperties.render(name, fnc);
+      }, 0);
+    },
+
+    /**
+     * @public
+     * @function render
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This is where Ninja must prove himself, Ninja must
+     *           provide some results.
+     * @see      http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line
+     * @todo     Reconsider the design of the Ninja.
+     */
+    render: function (name, fnc) {
+      var ninja = ninjas[name];
+      var returnData = null;
+
+      if (ninja != null) {
+        try {
+          ninja.output.innerHTML = samurai(ninja.template.innerHTML, ninja.data);
+        } catch (Exception) {
+          ninjaLog(Exception);
+          returnData = samurai(ninja.template.innerHTML, ninja.data);
+        }
+
+        // Type comparison & value for the sake of it.
+        if (typeof fnc === "function") {
+          fnc(returnData);
+        } else if (fnc != null) {
+          throw new Error("The Sensai will not be happy with this ninja." +
+            "\nThere is only a certian format in which is accepted, the provided data " +
+            "was not the correct format.\n\nThis method accepts a string, " +
+            "followed by a function(or null) and nothign else.");
+        }
+
+        if (ninja.controller != null && typeof ninja.controller == 'function') {
+          ninja.controller(returnData);
+        }
+
+        if (returnData != null) {
+          return returnData;
+        }
+      }
+    },
+
+    /**
+     * @public
+     * @function
+     * @param    {String}   name
+     * @param    {Function} fnc
+     * @desc     This may be for when Ninja wishes to add to his knowledge more so
+     *           than practice upon existing knowledge.
+     * @todo     Carryout some testing.
+     */
+    renderAppend: function (name, fnc) {
+      var ninja = ninjas[name];
+
+      if (ninja != null) {
+        try {
+          var oldHTML = ninja.output.innerHTML.toString();
+          publicProperties.render(name, fnc);
+          var newHTML = ninja.output.innerHTML.toString();
+          ninja.output.innerHTML = oldHTML + newHTML;
+        } catch (NoDOMException) {
+          ninjaLog(NoDOMException);
+          return void 0;
+        }
+
+
+        if (typeof fnc === "function") {
+          fnc();
+        } else if (fnc != null) {
+          throw new Error("The Sensai will not be happy with this ninja." +
+            "\nThere is only a certian format in which is accepted, the provided data " +
+            "was not the correct format.\n\nThis method accepts a string, " +
+            "followed by a function(or null) and nothign else.");
+        }
+
+        if (ninja.controller != null && typeof ninja.controller == 'function') {
+          ninja.controller();
+        }
+      }
+    },
+
+    /**
+     * @public
+     * @function toggleErrorLog
+     * @desc     This method will allow Ninja to see whether or not
+     *           he would like to see the ways of his own mistakes.
+     */
+    toggleErrorLog: function () {
+      debug = !debug;
+    },
+
+    /**
+     * @public
+     * @function addTemplate
+     * @param    {Object} options
+     * @desc     This method allows Ninja to add a custom template
+     *           once the document has loaded.
+     */
+    addTemplate: function (options) {
+      if (typeof options == "object") {
+        if ('name' in options
+          && 'data' in options
+          && 'output' in options
+          && 'template' in options) {
+          try {
+            ninjas[options.name].template = options.template;
+            ninjas[options.name].output = document.querySelector(options.output);
+            ninjas[options.name].data = options.data;
+
+            if ('controller' in options) {
+              ninjas[options.name].controller = options.controller;
+            }
+          } catch (Exception) {
+            ninjaLog(Exception);
+          }
+        }
+      }
+    }
+  };
+
+
+  /**
+   * Ah, I see Ninja, The student has become the master.
+   */
+  if (Ninja.Sensai == null) {
+    Ninja.Sensai = publicProperties;
+  }
+
+  return Ninja.Sensai;
 }
