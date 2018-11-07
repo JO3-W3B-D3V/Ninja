@@ -11,8 +11,31 @@ I developed Ninja for the above reasons, I found that **a lot** existing templat
 As they say, it's good to be a _'jack of all trades'_, but it's better to be a master of one, and that's essentially the desired outcome from Ninja, it doesn't do any event handling, it doesn't do 'x', 'y', or 'z', it simply looks at some template(s) and produces the HTML/DHTML, that's it. 
 
 
-## Todo
-Consider creating a standard & doc(s) for NML(Ninja Markup Language).
+## NML
+Ninja makes use of it's own simple to use and read markup language, also known as Nina Markup 
+Language. As you can see with some of the example(s) provided within this document, it's somewhat
+ similar to syntax(es) such as [ETC](https://github.com/baryshev/ect) or 
+ [CFML](https://searchoracle.techtarget.com/definition/CFML), seeing as some developers may 
+ already bee familiar with this kind of syntax, why re-invent the wheel?
+ 
+### How To Use?
+NML is reasonably simple, if you wish to execute some standard JavaScript within NML, you can do 
+it quite simply, although you'll want to keep it on a single line because of the simple manner in 
+which NML currently works. If you wish to render some value that's accessible within Ninja or 
+JavaScript, you can simply render it like so:
+
+```javascript
+// This is some generic value.
+<% var time = new Date().getTime(); %>
+
+// Output the value. 
+<p><% time %></p>
+```
+
+As you can see in the example above, it simply executes the first line as you'd expect, then it 
+renders the JavaScript variable, it's quite literally as simple as that! However, when rendering 
+your variables, be sure to leave out any logic/JavaScript syntax, this way Ninja knows when to 
+execute JavaScript logic and when to simply render some value, it's pretty simple. 
 
 # Version 2
 With version two the core functionality is _slightly_ different, the syntax is much more JSX oriented, if you’d like to see how the new version works, take a look at [this link](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line).To create a template now though you need to use _slightly_ different syntax, like so: 
