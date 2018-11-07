@@ -63,6 +63,13 @@ With this version you can now parse a _'sub-template'_ into another, you can do 
 ### Version 2.0.2
 With this version you can now render a template asynchronously by taking advantage of what is simply just running the following code, ```setTimeout(() => { render(name, fnc); }, 0);```, as you can see this hardly adds any form of complexity, and it takes up about five lines of code whilst uncompressed.
 
+### Version 2.0.7
+Ability to include controllers within the Ninja object(s), more formal documentation regarding 
+NML, etc, to include a controller, all you need to do is something along the lines of ``` new 
+Ninja().setController('demo', () => { ... });```. Furthermore, Ninja now includes a debugging 
+feature, to make use of this debugging feature, all you need to do is run the following method 
+```new Ninja().toggleErrorLog();```, currently Ninja will log _some_ errors anyway. 
+
 # Version 1
 As I am a full stack web developer, I typically develop the back end in such a way that it becomes either a microservice or an API. While trying to follow the rules to defining a restful system, I decided that rendering should be done on the front end, one may debate that rendering _should_ be done on the back end, which is a fair debate. **But**, personally I think that it should be done on the front end, the way I see it is that what the user sees is a part of the front end application, therefore to me this makes a bit more logical sense.
 
